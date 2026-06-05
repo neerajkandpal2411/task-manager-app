@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "1780641513763",
+    "title": "Have to go market",
+    "description": "For shopping",
+    "dueDate": "2026-06-06",
+    "completed": false,
+    "createdAt": "2026-06-05T06:38:33.763Z",
+    "updatedAt": "2026-06-05T06:38:41.746Z"
+  }
+]
