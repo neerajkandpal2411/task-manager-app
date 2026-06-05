@@ -1,3 +1,110 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black min-h-screen;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-black/80 backdrop-blur-lg border border-orange-500/30 shadow-xl;
+  }
+  
+  .glass-card-hover {
+    @apply transition-all duration-300 hover:bg-black/90 hover:border-orange-500/50 hover:scale-[1.02] hover:shadow-2xl;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-orange-600 to-orange-500 text-white font-semibold py-2 px-4 rounded-lg 
+           transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 
+           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-800/80 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg 
+           transition-all duration-300 hover:bg-gray-700 hover:scale-105;
+  }
+  
+  .input-modern {
+    @apply w-full px-4 py-2 bg-black/50 border border-orange-500/30 rounded-lg 
+           text-white placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-orange-500 
+           focus:border-transparent transition-all duration-300;
+  }
+  
+  .task-card {
+    @apply glass-card rounded-xl p-4 mb-3 transition-all duration-300 animate-slideIn;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(249, 115, 22, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+    }
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .animate-pulse-fast {
+    animation: pulse 0.5s ease-in-out;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+}
+
+/* Custom scrollbar for black theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(100%);
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(70%) sepia(100%) saturate(1000%) hue-rotate(350deg) brightness(100%);
+}
