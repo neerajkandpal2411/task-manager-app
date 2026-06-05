@@ -1,16 +1,19 @@
 import { useState } from 'react';
+import { Plus, ChevronDown, Save, Calendar, FileText, AlertCircle } from 'lucide-react';
 
 function TaskForm({ onAddTask }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
     if (!title.trim()) {
       setError('Title is required');
+      setTimeout(() => setError(''), 3000);
       return;
     }
     
@@ -25,57 +28,79 @@ function TaskForm({ onAddTask }) {
     setDescription('');
     setDueDate('');
     setError('');
+    setIsExpanded(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 className="text-xl font-bold mb-4">Add New Task</h2>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
-          {error}
-        </div>
-      )}
-      
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Title *</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter task title"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Description (Optional)</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          rows="3"
-          placeholder="Enter task description"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Due Date (Optional)</label>
-        <input
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      
+    <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
       <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-6 py-4 flex items-center justify-between text-white hover:bg-orange-500/10 transition-colors"
       >
-        Add Task
+        <div className="flex items-center gap-3">
+          <Plus className="w-5 h-5 text-orange-500" />
+          <span className="font-semibold text-orange-400">Add New Task</span>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-orange-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
       </button>
-    </form>
+      
+      {isExpanded && (
+        <form onSubmit={handleSubmit} className="px-6 pb-6 animate-slideIn">
+          {error && (
+            <div className="bg-red-500/20 border border-red-500/50 text-red-400 px-4 py-2 rounded-lg mb-4 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              {error}
+            </div>
+          )}
+          
+          <div className="mb-4">
+            <label className="block text-orange-400 font-medium mb-2 text-sm">Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="input-modern"
+              placeholder="What needs to be done?"
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label className="block text-orange-400 font-medium mb-2 text-sm flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="input-modern"
+              rows="3"
+              placeholder="Add details..."
+            />
+          </div>
+          
+          <div className="mb-5">
+            <label className="block text-orange-400 font-medium mb-2 text-sm flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Due Date
+            </label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="input-modern"
+            />
+          </div>
+          
+          <button
+            type="submit"
+            className="btn-primary w-full flex items-center justify-center gap-2"
+          >
+            <Save className="w-4 h-4" />
+            Create Task
+          </button>
+        </form>
+      )}
+    </div>
   );
 }
 
