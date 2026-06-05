@@ -95,7 +95,7 @@ function TaskForm({ onAddTask }) {
             type="submit"
             className="btn-primary w-full flex items-center justify-center gap-2"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4"/>
             Create Task
           </button>
         </form>

@@ -20,7 +20,7 @@ function FilterButtons({ currentFilter, onFilterChange }) {
                 ? `bg-gradient-to-r ${filter.color} text-white shadow-lg shadow-orange-500/30 scale-105` 
                 : 'glass-card text-orange-400 hover:text-orange-300 hover:scale-105'}`}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4 h-4"/>
             {filter.name}
           </button>
         );

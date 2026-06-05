@@ -122,7 +122,7 @@ function TaskItem({ task, onToggleComplete, onEdit, onDelete }) {
             className="text-red-500 hover:text-red-400 transition-all duration-300 hover:scale-110 p-1"
             title="Delete task"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4"/>
           </button>
         </div>
       </div>
