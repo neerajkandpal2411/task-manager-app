@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LayoutList, CheckCircle2, Circle, Plus, RefreshCw, Sparkles } from 'lucide-react';
 import TaskForm from './components/TaskForm';
 import TaskItem from './components/TaskItem';
 import FilterButtons from './components/FilterButtons';
@@ -9,6 +10,7 @@ function App() {
   const [filter, setFilter] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [animation, setAnimation] = useState(false);
 
   // Load tasks on component mount
   useEffect(() => {
@@ -32,6 +34,9 @@ function App() {
     try {
       const createdTask = await createTask(newTask);
       setTasks([createdTask, ...tasks]);
+      // Trigger animation
+      setAnimation(true);
+      setTimeout(() => setAnimation(false), 500);
     } catch (err) {
       setError('Failed to add task');
     }
@@ -74,42 +79,90 @@ function App() {
   // Calculate counts
   const activeCount = tasks.filter(t => !t.completed).length;
   const completedCount = tasks.filter(t => t.completed).length;
+  const totalCount = tasks.length;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-3xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Task Manager</h1>
+    <div className="min-h-screen py-8 px-4 bg-gradient-to-br from-black via-gray-900 to-black">
+      <div className="max-w-4xl mx-auto">
+        {/* Animated Header */}
+        <div className="text-center mb-8 animate-slideIn">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <LayoutList className="w-10 h-10 text-orange-500" />
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 to-orange-300 
+                           bg-clip-text text-transparent">
+              TaskFlow
+            </h1>
+          </div>
+          <p className="text-orange-300/60 text-lg">Organize your tasks with style</p>
+        </div>
         
-        {/* Task Statistics */}
-        <div className="bg-white rounded-lg shadow-md p-4 mb-6 flex justify-between items-center">
-          <span className="text-gray-600">📋 Total: {tasks.length} tasks</span>
-          <div className="flex gap-4">
-            <span className="text-green-600">✓ Completed: {completedCount}</span>
-            <span className="text-orange-600">○ Active: {activeCount}</span>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="glass-card rounded-xl p-4 text-center transform transition-all duration-300 hover:scale-105 hover:border-orange-500/50">
+            <LayoutList className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-orange-500">{totalCount}</div>
+            <div className="text-orange-300/60 text-sm">Total Tasks</div>
+          </div>
+          
+          <div className="glass-card rounded-xl p-4 text-center transform transition-all duration-300 hover:scale-105 hover:border-orange-500/50">
+            <Circle className="w-8 h-8 text-orange-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-orange-400">{activeCount}</div>
+            <div className="text-orange-300/60 text-sm">Active Tasks</div>
+          </div>
+          
+          <div className="glass-card rounded-xl p-4 text-center transform transition-all duration-300 hover:scale-105 hover:border-orange-500/50">
+            <CheckCircle2 className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-orange-500">{completedCount}</div>
+            <div className="text-orange-300/60 text-sm">Completed</div>
           </div>
         </div>
         
+        {/* Error Message */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
-            {error}
-            <button onClick={loadTasks} className="ml-4 underline">Retry</button>
+          <div className="glass-card rounded-xl p-4 mb-4 border-red-500/50 bg-red-500/10 animate-slideIn">
+            <div className="flex items-center justify-between">
+              <span className="text-red-400">{error}</span>
+              <button 
+                onClick={loadTasks} 
+                className="px-3 py-1 bg-red-500/20 rounded-lg text-red-400 hover:bg-red-500/30 transition flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Retry
+              </button>
+            </div>
           </div>
         )}
         
-        <TaskForm onAddTask={handleAddTask} />
+        {/* Add Task Form */}
+        <div className="animate-slideIn">
+          <TaskForm onAddTask={handleAddTask} />
+        </div>
         
-        <FilterButtons currentFilter={filter} onFilterChange={setFilter} />
+        {/* Filter Buttons */}
+        <div className="my-6 animate-slideIn">
+          <FilterButtons currentFilter={filter} onFilterChange={setFilter} />
+        </div>
         
+        {/* Task List */}
         {loading ? (
-          <div className="text-center py-8 text-gray-500">Loading tasks...</div>
+          <div className="glass-card rounded-xl p-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mb-3"></div>
+            <div className="text-orange-300/60">Loading your tasks...</div>
+          </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
-            {tasks.length === 0 
-              ? '✨ No tasks yet. Add your first task above!' 
-              : `No {filter.toLowerCase()} tasks found.`}
+          <div className="glass-card rounded-xl p-12 text-center animate-slideIn">
+            <Sparkles className="w-16 h-16 text-orange-500/50 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-orange-400 mb-2">
+              {tasks.length === 0 ? 'No tasks yet' : `No ${filter.toLowerCase()} tasks found`}
+            </h3>
+            <p className="text-orange-300/60">
+              {tasks.length === 0 
+                ? 'Create your first task to get started' 
+                : 'Try changing the filter or add new tasks'}
+            </p>
           </div>
         ) : (
-          <div>
+          <div className={`space-y-3 ${animation ? 'animate-pulse-fast' : ''}`}>
             {filteredTasks.map(task => (
               <TaskItem
                 key={task.id}
